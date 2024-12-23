@@ -7,8 +7,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'Master', credentialsId: 'github-token', url: 'https://github.com/nramana050/DevOps-Engineer--Assignment.git' 
-                
+                git branch: 'Master', credentialsId: 'github-token', url: 'https://github.com/nramana050/DevOps-Engineer--Assignment.git'
             }
         }
         stage('Compile Code') {
@@ -57,10 +56,10 @@ pipeline {
                 subject: "Build ${currentBuild.fullDisplayName} - ${currentBuild.result}",
                 body: "Build result: ${currentBuild.result}. See console output: ${env.BUILD_URL}",
                 recipientProviders: [culprits()]
-            
+            )
         }
         failure {
             slackSend(color: 'danger', message: "Build ${currentBuild.fullDisplayName} failed: ${env.BUILD_URL}")
-        
+        }
     }
 }
