@@ -1,10 +1,9 @@
 Pipeline Steps
+
 Checkout:
 In this stage, Jenkins pulls the latest code from the configured Git repository.
 Tool: Git plugin
 Configuration: The repository URL is configured in the Source Code Management section of the Jenkins job configuration.
-
-
 Step : This step runs SonarQube analysis on the codebase to evaluate the quality and technical debt of the code. If the code does not meet the predefined quality gates, the build will fail.
 Tool: SonarQube Scanner
 Configuration:
