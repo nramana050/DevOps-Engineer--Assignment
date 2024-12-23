@@ -5,9 +5,10 @@ pipeline {
         maven 'Maven3'
     }
     stages {
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                checkout scm
+                git branch: 'Master', credentialsId: 'github-token', url: 'https://github.com/nramana050/DevOps-Engineer--Assignment.git' 
+                
             }
         }
         stage('Compile Code') {
@@ -52,22 +53,14 @@ pipeline {
     }
     post {
         always {
-            mail to: 'nramana971@example.com',
-                 subject: "Build ${currentBuild.fullDisplayName}",
-                 body: "Check Jenkins for details."
-            slackSend(channel: '#your-channel', message: "Build ${currentBuild.fullDisplayName} completed. Check Jenkins for details.")
-        }
-        success {
-            mail to: 'nramana971@example.com',
-                 subject: "Build Success: ${currentBuild.fullDisplayName}",
-                 body: "The build was successful. Check Jenkins for details."
-            slackSend(channel: '#your-channel', message: "Build Success: ${currentBuild.fullDisplayName}")
+            emailext(
+                subject: "Build ${currentBuild.fullDisplayName} - ${currentBuild.result}",
+                body: "Build result: ${currentBuild.result}. See console output: ${env.BUILD_URL}",
+                recipientProviders: [culprits()]
+            
         }
         failure {
-            mail to: 'nramana971@example.com',
-                 subject: "Build Failed: ${currentBuild.fullDisplayName}",
-                 body: "The build failed. Please check Jenkins for details."
-            slackSend(channel: '#your-channel', message: "Build Failed: ${currentBuild.fullDisplayName}. Please check Jenkins for details.")
-        }
+            slackSend(color: 'danger', message: "Build ${currentBuild.fullDisplayName} failed: ${env.BUILD_URL}")
+        
     }
 }
