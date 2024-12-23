@@ -1,0 +1,102 @@
+Pipeline Steps
+Checkout:
+In this stage, Jenkins pulls the latest code from the configured Git repository.
+Tool: Git plugin
+Configuration: The repository URL is configured in the Source Code Management section of the Jenkins job configuration.
+
+
+Step : This step runs SonarQube analysis on the codebase to evaluate the quality and technical debt of the code. If the code does not meet the predefined quality gates, the build will fail.
+Tool: SonarQube Scanner
+Configuration:
+SonarQube server needs to be configured in Jenkins Manage Jenkins ,Configure System , SonarQube Servers.
+The project’s sonar-project.properties build script should be set up for SonarQube integration.
+
+Code Coverage (JaCoCo):
+
+Step : The JaCoCo tool generates code coverage reports, ensuring that the codebase has adequate test coverage.
+Tool: JaCoCo
+Configuration:
+Integrate JaCoCo with your build tool  Gradle, Maven.
+Configure JaCoCo to generate the coverage report, typically as build/reports/jacoco/test/html/index.html .
+Publish the coverage report in Jenkins.
+
+Cyclomatic Complexity Lizard:
+Step : This step calculates the cyclomatic complexity of the codebase, which helps evaluate the complexity and maintainability of the code.
+Tool: Lizard
+Configuration:
+Install the Lizard tool on your Jenkins machine.
+Security Scan OWASP Dependency-Check:
+Step : This step performs a security vulnerability scan on project dependencies to check for known security flaws in libraries.
+Tool: OWASP Dependency-Check
+Configuration:
+Install the OWASP Dependency-Check Plugin in Jenkins.
+Set up the Dependency-Check configuration in your Jenkinsfile to scan for vulnerabilities in dependencies.
+Notifications:
+Step Description: Send build notifications via email or Slack based on the result of the build.
+Tool: Email Extension Plugin for email
+Configuration:
+Email Setup: Configure SMTP in Manage Jenkins , Configure System.
+Slack Setup: Configure the Slack webhook URL for sending notifications.
+
+Tools Integrated
+Git:
+Purpose: Used for source code management Jenkins pulls the latest code from a Git repository GitHub  for building and analysis.
+Configuration: Set up Git repository URL in the Source Code Management section of Jenkins job.
+SonarQube:
+Purpose: Analyzes code quality and technical debt, providing insights into potential improvements.
+Configuration:
+Install SonarQube server and connect it to Jenkins through SonarQube Scanner plugin.
+Define the SonarQube project settings usually in sonar-project.properties.
+JaCoCo:
+Purpose: Collects code coverage data for the project, ensuring that the code is well-tested.
+Configuration: Configure JaCoCo within your build tool maven to generate reports.
+Lizard:
+Purpose: Calculates cyclomatic complexity, which measures the complexity of code.
+Configuration: Install Lizard tool and run it within the Jenkins pipeline to calculate complexity.
+OWASP Dependency-Check:
+Purpose: Scans the project's dependencies for known security vulnerabilities.
+Configuration: Configure the Dependency-Check tool in Jenkins and integrate it into the pipeline.
+Email & Slack Notifications:
+Purpose: Notify developers on build results and failures.
+Configuration: Set up email settings in Jenkins and configure Slack webhook for notifications.
+Configuration Needed
+Jenkins Configuration:
+Install necessary plugins (Git, SonarQube Scanner, OWASP Dependency-Check, Email Extension, etc.).
+Configure SMTP settings for email notifications (Manage Jenkins > Configure System).
+Set up SonarQube and OWASP Dependency-Check servers.
+Add Git credentials for the repository in Jenkins.
+SonarQube:
+Set up SonarQube server and project settings (e.g., sonar-project.properties).
+OWASP Dependency-Check:
+Install and configure the plugin in Jenkins.
+Add necessary arguments to the dependencyCheck command in the pipeline.
+Slack Notifications:
+Configure Slack webhook URL in Jenkins.
+Troubleshooting Steps for Common Issues
+
+
+SonarQube Analysis Failures:
+
+Issue: SonarQube fails due to incorrect project settings.
+Solution: Ensure that the sonar-project.properties file is correctly configured and that the SonarQube server is properly integrated with Jenkins.
+JaCoCo Coverage Not Displaying:
+
+Issue: JaCoCo coverage reports are not displayed in Jenkins.
+Solution: Make sure that the build tool (e.g., Gradle, Maven) is configured correctly to generate JaCoCo reports. Check the report directory and ensure it's published in Jenkins.
+Cyclomatic Complexity Reports Not Generated:
+
+Issue: Lizard fails to generate a cyclomatic complexity report.
+Solution: Ensure that the Lizard tool is installed on the Jenkins machine and that the correct command is being run in the pipeline.
+Dependency-Check Fails to Scan:
+
+Issue: OWASP Dependency-Check is not scanning dependencies.
+Solution: Ensure that the correct arguments are being passed to the dependencyCheck command. Verify that the dependencies are being picked up correctly.
+Slack Notifications Not Sent:
+
+Issue: Slack notifications do not appear after the build.
+Solution: Verify that the Slack webhook URL is correctly configured in Jenkins and that the slackSend step is included in the post block of the pipeline.
+Email Notifications Not Sent:
+
+Issue: No email notifications are sent after the build.
+Solution: Double-check the SMTP settings in Jenkins (Manage Jenkins > Configure System). Ensure the email extension plugin is configured correctly.
+
