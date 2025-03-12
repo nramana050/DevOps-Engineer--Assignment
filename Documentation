@@ -1,4 +1,4 @@
-Pipeline Steps
+Pipeline Step
 
 Checkout:
 In this stage, Jenkins pulls the latest code from the configured Git repository.
